@@ -718,10 +718,10 @@ int Sark_SndRcv (int16 num, uint8 *tx, uint8 *rx)
 
 	for (i=0; i < 5; i++)
 	{
-        rc = hid_write(handle, tx, RAWHID_TX_SIZE);
+        rc = hid_write(handle, tx, SARKCMD_TX_SIZE);
 		if (rc < 0)
 			break;
-        rc = hid_read(handle, rx, RAWHID_RX_SIZE);
+        rc = hid_read(handle, rx, SARKCMD_RX_SIZE);
 		if (rc < 0)
 			break;
 		if (rx[0]==ANS_SARK_OK || rx[0]==ANS_SARK_ERR)
