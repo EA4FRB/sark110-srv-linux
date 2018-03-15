@@ -100,6 +100,11 @@ int main(int argc, char **argv) {
 	          sizeof(server_address))) < 0) {
 		error("could not bind socket");
 	}
+	int wait_size = 16;  // maximum number of waiting clients, after which
+						 // dropping begins
+	if (listen(listen_sock, wait_size) < 0) {
+		error("could not open socket for listening");
+	}
 
 	// Server process
 	for (;;)
@@ -125,12 +130,6 @@ int main(int argc, char **argv) {
 		Sark_Version(0, &u16Ver, tu8FW);
 		Sark_DiskVolume(0, tu8Volume);
 		printf("Protocol Version: %04x, Firmware Version: %s, Disk Volume: %s\n", u16Ver, tu8FW, tu8Volume);
-
-		int wait_size = 16;  // maximum number of waiting clients, after which
-							 // dropping begins
-		if (listen(listen_sock, wait_size) < 0) {
-			error("could not open socket for listening");
-		}
 
 		// open a new socket to transmit data per connection
 		int sock;
@@ -204,30 +203,34 @@ static void print_ifconfig (void)
 {
     int fd;
     struct ifreq ifr;
+	int i;
+	
+    char* iface[] = { "wlan0", "eth0" };
 
-    char iface[] = "wlan0";
+	for (i=0; i < sizeof(iface)/sizeof(char*); i++)
+	{
+		fd = socket(AF_INET, SOCK_DGRAM, 0);
 
-    fd = socket(AF_INET, SOCK_DGRAM, 0);
+		//Type of address to retrieve - IPv4 IP address
+		ifr.ifr_addr.sa_family = AF_INET;
 
-    //Type of address to retrieve - IPv4 IP address
-    ifr.ifr_addr.sa_family = AF_INET;
+		//Copy the interface name in the ifreq structure
+		strncpy(ifr.ifr_name , iface[i] , IFNAMSIZ-1);
 
-    //Copy the interface name in the ifreq structure
-    strncpy(ifr.ifr_name , iface , IFNAMSIZ-1);
+		//get the ip address
+		ioctl(fd, SIOCGIFADDR, &ifr);
 
-    //get the ip address
-    ioctl(fd, SIOCGIFADDR, &ifr);
+		//display ip
+		printf("IP address of %s - %s\n" , iface[i] , inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr) );
 
-    //display ip
-    printf("IP address of %s - %s\n" , iface , inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr) );
+		//get the netmask ip
+		ioctl(fd, SIOCGIFNETMASK, &ifr);
 
-    //get the netmask ip
-    ioctl(fd, SIOCGIFNETMASK, &ifr);
+		//display netmask
+		printf("Netmask of %s - %s\n" , iface[i] , inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr) );
 
-    //display netmask
-    printf("Netmask of %s - %s\n" , iface , inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr) );
-
-    close(fd);
+		close(fd);
+	}
  }
 
 /**
