@@ -19,7 +19,10 @@ Build
 ------
 make
 
-Install
--------
-Add sark110.rules file to /etc/udev/rules.d
-    
+Run
+----
+First time, copy sark110.rules file to /etc/udev/rules.d
+Otherwise, you will need to run as root.
+
+./sark110-srv.a
+
