@@ -11,14 +11,18 @@ Build Instructions
 ===================
 Prerequisites:
 --------------
-You will need to install development packages for libudev and	libusb.
+You will need to install development packages for libudev and libusb.
+
     sudo apt-get install libudev-dev libusb-1.0-0-dev
 
 Build
 ------
 make
 
-Install
--------
-Add sark110.rules file to /etc/udev/rules.d
-    
+Run
+----
+First time, copy sark110.rules file to /etc/udev/rules.d
+Otherwise, you will need to run as root.
+
+./sark110-srv.a
+
