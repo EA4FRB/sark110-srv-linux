@@ -91,7 +91,7 @@ int main(int argc, char **argv) {
 	// create a TCP socket, creation returns -1 on failure
 	int listen_sock;
 	if ((listen_sock = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
-		error("could not create listen socket\n");
+		error("could not create listen socket");
 	}
 
 	// bind it to listen to the incoming connections on the created server
@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
 		{
 			if (Sark_Connect() >= 0)
 				break;
-			sleep(5);
+			sleep(5);	/* 5 seconds wait */
 		}
 		printf ("sark-110 connected\n");
 		Sark_Version(0, &u16Ver, tu8FW);
@@ -173,8 +173,8 @@ int main(int argc, char **argv) {
 					break;
 			if (i >= SARKCMD_TX_SIZE)
 			{
-				printf ("Client disconnected\n");
-				send(sock, tx, SARKCMD_RX_SIZE, 0);
+				printf ("Client sent disconnect request\n");
+				send(sock, tx, SARKCMD_RX_SIZE, 0);	/* answers with same data */
 				break;
 			}
 			rc = Sark_SndRcv(0, tx, rx);
@@ -204,7 +204,7 @@ static void print_ifconfig (void)
     int fd;
     struct ifreq ifr;
 	int i;
-	
+
     char* iface[] = { "wlan0", "eth0" };
 
 	for (i=0; i < sizeof(iface)/sizeof(char*); i++)
