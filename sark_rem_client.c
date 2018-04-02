@@ -145,7 +145,7 @@ int Sark_Version (uint16_t *pu16Ver, uint8_t *pu8FW)
   *			@li -1: comm error
   *			@li -2: device answered error
   */
-int Sark_Meas_Rx (uint32_t u32Freq, bool bCal, uint8_t u8Samples, float *pfR, float *pfX, float *pfS21re, float *pfS21im)
+int Sark_Meas_Rx (uint32_t u32Freq, uint8_t bCal, uint8_t u8Samples, float *pfR, float *pfX, float *pfS21re, float *pfS21im)
 {
 	uint8_t tu8Rx[SARKCMD_RX_SIZE];
 	uint8_t tu8Tx[SARKCMD_TX_SIZE];
@@ -191,7 +191,7 @@ int Sark_Meas_Rx (uint32_t u32Freq, bool bCal, uint8_t u8Samples, float *pfR, fl
   *			@li -1: comm error
   *			@li -2: device answered error
   */
-int Sark_Meas_Rx_Eff (uint32_t u32Freq, uint32_t u32Step, bool bCal, uint8_t u8Samples,
+int Sark_Meas_Rx_Eff (uint32_t u32Freq, uint32_t u32Step, uint8_t bCal, uint8_t u8Samples,
 	float *pfR1, float *pfX1,
 	float *pfR2, float *pfX2,
 	float *pfR3, float *pfX3,
@@ -458,7 +458,7 @@ int Sark_BatteryStatus (uint8_t *pu8Vbus, uint16_t *pu16Volt, uint8_t *pu8Chr)
   *			@li -1: comm error
   *			@li -2: device answered error
   */
-int Sark_GetKey (int16_t num, uint8_t *pu8Key)
+int Sark_GetKey (uint8_t *pu8Key)
 {
 	uint8_t tu8Rx[SARKCMD_RX_SIZE];
 	uint8_t tu8Tx[SARKCMD_TX_SIZE];

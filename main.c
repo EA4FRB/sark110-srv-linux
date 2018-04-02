@@ -109,9 +109,9 @@ int main(int argc, char **argv) {
 	// Server process
 	for (;;)
 	{
-		uint16 u16Ver;
-		uint8 tu8FW[25];
-		uint8 tu8Volume[25];
+		uint16_t u16Ver;
+		uint8_t tu8FW[25];
+		uint8_t tu8Volume[25];
 		// socket address used to store client address
 		struct sockaddr_in client_address;
 		int client_address_len = 0;
@@ -147,8 +147,8 @@ int main(int argc, char **argv) {
 		clientlen = sizeof(clientaddr);
 		for (;;)
 		{
-			char tx[SARKCMD_TX_SIZE];
-			char rx[SARKCMD_RX_SIZE];
+			uint8_t tx[SARKCMD_TX_SIZE];
+			uint8_t rx[SARKCMD_RX_SIZE];
 			int rc;
 
 			/*
@@ -177,7 +177,7 @@ int main(int argc, char **argv) {
 				send(sock, tx, SARKCMD_RX_SIZE, 0);	/* answers with same data */
 				break;
 			}
-			rc = Sark_SndRcv(0, tx, rx);
+			rc = Sark_SndRcv(tx, rx);
 			if (rc < 0)
 			{
 				printf("Error: sark-110 communication\n");

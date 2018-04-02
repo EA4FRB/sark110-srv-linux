@@ -48,8 +48,8 @@ extern int Sark_Connect (void);
 extern int Sark_Close (void);
 extern int Sark_SndRcv (uint8_t *tx, uint8_t *rx);
 extern int Sark_Version (uint16_t *pu16Ver, uint8_t *pu8FW);
-extern int Sark_Meas_Rx (uint32_t u32Freq, bool bCal, uint8_t u8Samples, float *pfR, float *pfX, float *pfS21re, float *pfS21im);
-extern int Sark_Meas_Rx_Eff (uint32_t u32Freq, uint32_t u32Step, bool bCal, uint8_t u8Samples,
+extern int Sark_Meas_Rx (uint32_t u32Freq, uint8_t bCal, uint8_t u8Samples, float *pfR, float *pfX, float *pfS21re, float *pfS21im);
+extern int Sark_Meas_Rx_Eff (uint32_t u32Freq, uint32_t u32Step, uint8_t bCal, uint8_t u8Samples,
 	float *pfR1, float *pfX1,
 	float *pfR2, float *pfX2,
 	float *pfR3, float *pfX3,
