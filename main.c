@@ -127,8 +127,8 @@ int main(int argc, char **argv) {
 			sleep(5);	/* 5 seconds wait */
 		}
 		printf ("sark-110 connected\n");
-		Sark_Version(0, &u16Ver, tu8FW);
-		Sark_DiskVolume(0, tu8Volume);
+		Sark_Version(&u16Ver, tu8FW);
+		Sark_DiskVolume(tu8Volume);
 		printf("Protocol Version: %04x, Firmware Version: %s, Disk Volume: %s\n", u16Ver, tu8FW, tu8Volume);
 
 		// open a new socket to transmit data per connection

@@ -4,7 +4,7 @@
 OBJ = main.o sark_rem_client.o hid.o
 
 #Header files
-DEPS = sark_cmd_defs.h sark_rem_client.h device.h hidapi.h
+DEPS = sark_cmd_defs.h sark_rem_client.h hidapi.h
 
 #Libraries
 LIBS = -ludev

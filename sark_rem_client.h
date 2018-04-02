@@ -38,7 +38,7 @@
 #define __SARK_REM_CLIENT_H__
 
 /* Includes ------------------------------------------------------------------*/
-#include "device.h"
+#include <stdint.h>
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
@@ -46,28 +46,28 @@
 /* Exported functions ------------------------------------------------------- */
 extern int Sark_Connect (void);
 extern int Sark_Close (void);
-extern int Sark_SndRcv (int16 num, uint8 *tx, uint8 *rx);
-extern int Sark_Version (int16 num, uint16 *pu16Ver, uint8 *pu8FW);
-extern int Sark_Meas_Rx (int16 num, uint32 u32Freq, bool bCal, uint8 u8Samples, float *pfR, float *pfX, float *pfS21re, float *pfS21im);
-extern int Sark_Meas_Rx_Eff (int16 num, uint32 u32Freq, uint32 u32Step, bool bCal, uint8 u8Samples,
+extern int Sark_SndRcv (uint8_t *tx, uint8_t *rx);
+extern int Sark_Version (uint16_t *pu16Ver, uint8_t *pu8FW);
+extern int Sark_Meas_Rx (uint32_t u32Freq, bool bCal, uint8_t u8Samples, float *pfR, float *pfX, float *pfS21re, float *pfS21im);
+extern int Sark_Meas_Rx_Eff (uint32_t u32Freq, uint32_t u32Step, bool bCal, uint8_t u8Samples,
 	float *pfR1, float *pfX1,
 	float *pfR2, float *pfX2,
 	float *pfR3, float *pfX3,
 	float *pfR4, float *pfX4
 	);
-extern int Sark_Meas_Vect (int16 num, uint32 u32Freq, float *pfMagV, float *pfPhV,
+extern int Sark_Meas_Vect (uint32_t u32Freq, float *pfMagV, float *pfPhV,
 										   float *pfMagI, float *pfPhI );
-extern int Sark_Meas_RF (int16 num, uint32 u32Freq, float *pfMagV, float *pfPhV,
+extern int Sark_Meas_RF (uint32_t u32Freq, float *pfMagV, float *pfPhV,
 										   float *pfMagI, float *pfPhI );
-extern int Sark_Meas_Vect_Thru (int16 num, uint32 u32Freq, float *pfMagVout, float *pfPhVout,
+extern int Sark_Meas_Vect_Thru (uint32_t u32Freq, float *pfMagVout, float *pfPhVout,
 										   float *pfMagVin, float *pfPhVin );
-extern int Sark_Signal_Gen (int16 num, uint32 u32Freq, uint16 u16Level, uint8 u8Gain);
-extern int Sark_BatteryStatus (int16 num, uint8 *pu8Vbus, uint16 *pu16Volt, uint8 *pu8Chr);
-extern int Sark_GetKey (int16 num, uint8 *pu8Key);
-extern int Sark_DiskInfo (int16 num, uint32 *pu32Tot, uint32 *pu32Fre);
-extern int Sark_DiskVolume (int16 num, uint8 *pu8Volume);
-extern int Sark_Buzzer (int16 num, uint16 u16Freq, uint16 u16Duration);
-extern int Sark_Device_Reset (int16 num);
+extern int Sark_Signal_Gen (uint32_t u32Freq, uint16_t u16Level, uint8_t u8Gain);
+extern int Sark_BatteryStatus (uint8_t *pu8Vbus, uint16_t *pu16Volt, uint8_t *pu8Chr);
+extern int Sark_GetKey (uint8_t *pu8Key);
+extern int Sark_DiskInfo (uint32_t *pu32Tot, uint32_t *pu32Fre);
+extern int Sark_DiskVolume (uint8_t *pu8Volume);
+extern int Sark_Buzzer (uint16_t u16Freq, uint16_t u16Duration);
+extern int Sark_Device_Reset (void);
 
 #endif	 /* __SARK_REM_CLIENT_H__ */
 

@@ -47,14 +47,14 @@
 static hid_device *handle = NULL;
 
 /* Private function prototypes -----------------------------------------------*/
-static void Float2Buf (uint8 tu8Buf[4], float fVal);
-static void Int2Buf (uint8 tu8Buf[4], uint32 u32Val);
-static void Buf2Int (uint32 *pu32Val, uint8 tu8Buf[4]);
-static void Buf2Float (float *pfVal, uint8 tu8Buf[4]);
-static void Buf2Short (uint16 *pu16Val, uint8 tu8Buf[4]);
-static void Short2Buf (uint8 tu8Buf[4], uint16 u16Val);
-static uint16 Float2Half(float value);
-static float Half2Float(uint16 value);
+static void Float2Buf (uint8_t tu8Buf[4], float fVal);
+static void Int2Buf (uint8_t tu8Buf[4], uint32_t u32Val);
+static void Buf2Int (uint32_t *pu32Val, uint8_t tu8Buf[4]);
+static void Buf2Float (float *pfVal, uint8_t tu8Buf[4]);
+static void Buf2Short (uint16_t *pu16Val, uint8_t tu8Buf[4]);
+static void Short2Buf (uint8_t tu8Buf[4], uint16_t u16Val);
+static uint16_t Float2Half(float value);
+static float Half2Float(uint16_t value);
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -62,7 +62,7 @@ static float Half2Float(uint16 value);
   * @brief Connects to the SARK-110 device
   *
   * @retval
-  *			@li >=1: 	number of devices detected
+  *			@li 1: 		ok
   *			@li -1: 	device not detected
   */
 int Sark_Connect (void)
@@ -105,16 +105,16 @@ int Sark_Close (void)
   *			@li -1: comm error
   *			@li -2: device answered error
   */
-int Sark_Version (int16 num, uint16 *pu16Ver, uint8 *pu8FW)
+int Sark_Version (uint16_t *pu16Ver, uint8_t *pu8FW)
 {
-	uint8 tu8Rx[SARKCMD_RX_SIZE];
-	uint8 tu8Tx[SARKCMD_TX_SIZE];
+	uint8_t tu8Rx[SARKCMD_RX_SIZE];
+	uint8_t tu8Tx[SARKCMD_TX_SIZE];
 	int rc;
 
 	memset(tu8Tx, 0, SARKCMD_TX_SIZE);
 	tu8Tx[0] = CMD_SARK_VERSION;
 
-	rc = Sark_SndRcv (num, tu8Tx, tu8Rx);
+	rc = Sark_SndRcv (tu8Tx, tu8Rx);
 	if (rc < 0)
 	{
 		return -1;
@@ -145,10 +145,10 @@ int Sark_Version (int16 num, uint16 *pu16Ver, uint8 *pu8FW)
   *			@li -1: comm error
   *			@li -2: device answered error
   */
-int Sark_Meas_Rx (int16 num, uint32 u32Freq, bool bCal, uint8 u8Samples, float *pfR, float *pfX, float *pfS21re, float *pfS21im)
+int Sark_Meas_Rx (uint32_t u32Freq, bool bCal, uint8_t u8Samples, float *pfR, float *pfX, float *pfS21re, float *pfS21im)
 {
-	uint8 tu8Rx[SARKCMD_RX_SIZE];
-	uint8 tu8Tx[SARKCMD_TX_SIZE];
+	uint8_t tu8Rx[SARKCMD_RX_SIZE];
+	uint8_t tu8Tx[SARKCMD_TX_SIZE];
 	int rc;
 
 	memset(tu8Tx, 0, SARKCMD_TX_SIZE);
@@ -160,7 +160,7 @@ int Sark_Meas_Rx (int16 num, uint32 u32Freq, bool bCal, uint8 u8Samples, float *
 		tu8Tx[5] = PAR_SARK_UNCAL;
 	tu8Tx[6] = u8Samples;
 
-	rc = Sark_SndRcv (num, tu8Tx, tu8Rx);
+	rc = Sark_SndRcv (tu8Tx, tu8Rx);
 	if (rc < 0)
 	{
 		return -1;
@@ -180,7 +180,6 @@ int Sark_Meas_Rx (int16 num, uint32 u32Freq, bool bCal, uint8 u8Samples, float *
 /**
   * @brief Measure R and X - efficient
   *
-  * @param  num			device number (starting by zero)
   * @param  u32Freq		frequency
   * @param  u32Step		step
   * @param  bCal		{TRUE: OSL calibrated measurement; FALSE: not calibrated}
@@ -192,15 +191,15 @@ int Sark_Meas_Rx (int16 num, uint32 u32Freq, bool bCal, uint8 u8Samples, float *
   *			@li -1: comm error
   *			@li -2: device answered error
   */
-int Sark_Meas_Rx_Eff (int16 num, uint32 u32Freq, uint32 u32Step, bool bCal, uint8 u8Samples,
+int Sark_Meas_Rx_Eff (uint32_t u32Freq, uint32_t u32Step, bool bCal, uint8_t u8Samples,
 	float *pfR1, float *pfX1,
 	float *pfR2, float *pfX2,
 	float *pfR3, float *pfX3,
 	float *pfR4, float *pfX4
 	)
 {
-	uint8 tu8Rx[SARKCMD_RX_SIZE];
-	uint8 tu8Tx[SARKCMD_TX_SIZE];
+	uint8_t tu8Rx[SARKCMD_RX_SIZE];
+	uint8_t tu8Tx[SARKCMD_TX_SIZE];
 	int rc;
 
 	memset(tu8Tx, 0, SARKCMD_TX_SIZE);
@@ -213,7 +212,7 @@ int Sark_Meas_Rx_Eff (int16 num, uint32 u32Freq, uint32 u32Step, bool bCal, uint
 		tu8Tx[5] = PAR_SARK_UNCAL;
 	tu8Tx[6] = u8Samples;
 
-	rc = Sark_SndRcv (num, tu8Tx, tu8Rx);
+	rc = Sark_SndRcv(tu8Tx, tu8Rx);
 	if (rc < 0)
 	{
 		return -1;
@@ -223,7 +222,7 @@ int Sark_Meas_Rx_Eff (int16 num, uint32 u32Freq, uint32 u32Step, bool bCal, uint
 		return -2;
 	}
 
-	uint16 u16R, u16X;
+	uint16_t u16R, u16X;
 	float fR, fX;
 	int offset = 1;
 
@@ -265,7 +264,6 @@ int Sark_Meas_Rx_Eff (int16 num, uint32 u32Freq, uint32 u32Step, bool bCal, uint
 /**
   * @brief Measure raw vector
   *
-  * @param  num			device number (starting by zero)
   * @param  u32Freq		frequency
   * @param  pfMagV		magnitude voltage
   * @param  pfPhV		phase voltage
@@ -276,16 +274,16 @@ int Sark_Meas_Rx_Eff (int16 num, uint32 u32Freq, uint32 u32Step, bool bCal, uint
   *			@li -1: comm error
   *			@li -2: device answered error
   */
-int Sark_Meas_Vect (int16 num, uint32 u32Freq, float *pfMagV, float *pfPhV, float *pfMagI, float *pfPhI )
+int Sark_Meas_Vect (uint32_t u32Freq, float *pfMagV, float *pfPhV, float *pfMagI, float *pfPhI )
 {
-	uint8 tu8Rx[SARKCMD_RX_SIZE];
-	uint8 tu8Tx[SARKCMD_TX_SIZE];
+	uint8_t tu8Rx[SARKCMD_RX_SIZE];
+	uint8_t tu8Tx[SARKCMD_TX_SIZE];
 	int rc;
 
 	memset(tu8Tx, 0, SARKCMD_TX_SIZE);
 	tu8Tx[0] = CMD_SARK_MEAS_VECTOR;
 	Int2Buf(&tu8Tx[1], u32Freq);
-	rc = Sark_SndRcv (num, tu8Tx, tu8Rx);
+	rc = Sark_SndRcv(tu8Tx, tu8Rx);
 	if (rc < 0)
 	{
 		return -1;
@@ -305,7 +303,6 @@ int Sark_Meas_Vect (int16 num, uint32 u32Freq, float *pfMagV, float *pfPhV, floa
 /**
   * @brief Measure RF
   *
-  * @param  num			device number (starting by zero)
   * @param  u32Freq		frequency
   * @param  pfMagV		magnitude voltage
   * @param  pfPhV		phase voltage
@@ -316,16 +313,16 @@ int Sark_Meas_Vect (int16 num, uint32 u32Freq, float *pfMagV, float *pfPhV, floa
   *			@li -1: comm error
   *			@li -2: device answered error
   */
-int Sark_Meas_RF (int16 num, uint32 u32Freq, float *pfMagV, float *pfPhV, float *pfMagI, float *pfPhI )
+int Sark_Meas_RF (uint32_t u32Freq, float *pfMagV, float *pfPhV, float *pfMagI, float *pfPhI )
 {
-	uint8 tu8Rx[SARKCMD_RX_SIZE];
-	uint8 tu8Tx[SARKCMD_TX_SIZE];
+	uint8_t tu8Rx[SARKCMD_RX_SIZE];
+	uint8_t tu8Tx[SARKCMD_TX_SIZE];
 	int rc;
 
 	memset(tu8Tx, 0, SARKCMD_TX_SIZE);
 	tu8Tx[0] = CMD_SARK_MEAS_RF;
 	Int2Buf(&tu8Tx[1], u32Freq);
-	rc = Sark_SndRcv (num, tu8Tx, tu8Rx);
+	rc = Sark_SndRcv (tu8Tx, tu8Rx);
 	if (rc < 0)
 	{
 		return -1;
@@ -345,7 +342,6 @@ int Sark_Meas_RF (int16 num, uint32 u32Freq, float *pfMagV, float *pfPhV, float 
 /**
   * @brief Measure raw vector Thru (SARK110 MK1)
   *
-  * @param  num			device number (starting by zero)
   * @param  u32Freq		frequency
   * @param  pfMagVout	magnitude voltage out
   * @param  pfPhVout	phase voltage out
@@ -356,16 +352,16 @@ int Sark_Meas_RF (int16 num, uint32 u32Freq, float *pfMagV, float *pfPhV, float 
   *			@li -1: comm error
   *			@li -2: device answered error
   */
-int Sark_Meas_Vect_Thru (int16 num, uint32 u32Freq, float *pfMagVout, float *pfPhVout, float *pfMagVin, float *pfPhVin )
+int Sark_Meas_Vect_Thru (uint32_t u32Freq, float *pfMagVout, float *pfPhVout, float *pfMagVin, float *pfPhVin )
 {
-	uint8 tu8Rx[SARKCMD_RX_SIZE];
-	uint8 tu8Tx[SARKCMD_TX_SIZE];
+	uint8_t tu8Rx[SARKCMD_RX_SIZE];
+	uint8_t tu8Tx[SARKCMD_TX_SIZE];
 	int rc;
 
 	memset(tu8Tx, 0, SARKCMD_TX_SIZE);
 	tu8Tx[0] = CMD_SARK_MEAS_VEC_THRU;
 	Int2Buf(&tu8Tx[1], u32Freq);
-	rc = Sark_SndRcv (num, tu8Tx, tu8Rx);
+	rc = Sark_SndRcv(tu8Tx, tu8Rx);
 	if (rc < 0)
 	{
 		return -1;
@@ -385,7 +381,6 @@ int Sark_Meas_Vect_Thru (int16 num, uint32 u32Freq, float *pfMagVout, float *pfP
 /**
   * @brief Signal generator
   *
-  * @param  num			device number (starting by zero)
   * @param  u32Freq		frequency
   * @param  u16Level	output level
   * @param  u8Gain		gain multiplier
@@ -394,10 +389,10 @@ int Sark_Meas_Vect_Thru (int16 num, uint32 u32Freq, float *pfMagVout, float *pfP
   *			@li -1: comm error
   *			@li -2: device answered error
   */
-int Sark_Signal_Gen (int16 num, uint32 u32Freq, uint16 u16Level, uint8 u8Gain)
+int Sark_Signal_Gen (uint32_t u32Freq, uint16_t u16Level, uint8_t u8Gain)
 {
-	uint8 tu8Rx[SARKCMD_RX_SIZE];
-	uint8 tu8Tx[SARKCMD_TX_SIZE];
+	uint8_t tu8Rx[SARKCMD_RX_SIZE];
+	uint8_t tu8Tx[SARKCMD_TX_SIZE];
 	int rc;
 
 	memset(tu8Tx, 0, SARKCMD_TX_SIZE);
@@ -406,7 +401,7 @@ int Sark_Signal_Gen (int16 num, uint32 u32Freq, uint16 u16Level, uint8 u8Gain)
 	Short2Buf(&tu8Tx[5], u16Level);
 	tu8Tx[7] = u8Gain;
 
-	rc = Sark_SndRcv (num, tu8Tx, tu8Rx);
+	rc = Sark_SndRcv(tu8Tx, tu8Rx);
 	if (rc < 0)
 	{
 		return -1;
@@ -421,7 +416,6 @@ int Sark_Signal_Gen (int16 num, uint32 u32Freq, uint16 u16Level, uint8 u8Gain)
 /**
   * @brief Battery status
   *
-  * @param  num			device number (starting by zero)
   * @param  pu8Vbus		USB vbus value
   * @param  pu16Volt	Battery voltage
   * @param  pu8Chr		Charger status
@@ -430,16 +424,16 @@ int Sark_Signal_Gen (int16 num, uint32 u32Freq, uint16 u16Level, uint8 u8Gain)
   *			@li -1: comm error
   *			@li -2: device answered error
   */
-int Sark_BatteryStatus (int16 num, uint8 *pu8Vbus, uint16 *pu16Volt, uint8 *pu8Chr)
+int Sark_BatteryStatus (uint8_t *pu8Vbus, uint16_t *pu16Volt, uint8_t *pu8Chr)
 {
-	uint8 tu8Rx[SARKCMD_RX_SIZE];
-	uint8 tu8Tx[SARKCMD_TX_SIZE];
+	uint8_t tu8Rx[SARKCMD_RX_SIZE];
+	uint8_t tu8Tx[SARKCMD_TX_SIZE];
 	int rc;
 
 	memset(tu8Tx, 0, SARKCMD_TX_SIZE);
 	tu8Tx[0] = CMD_BATT_STAT;
 
-	rc = Sark_SndRcv (num, tu8Tx, tu8Rx);
+	rc = Sark_SndRcv(tu8Tx, tu8Rx);
 	if (rc < 0)
 	{
 		return -1;
@@ -458,23 +452,22 @@ int Sark_BatteryStatus (int16 num, uint8 *pu8Vbus, uint16 *pu16Volt, uint8 *pu8C
 /**
   * @brief Get key press
   *
-  * @param  num		device number (starting by zero)
   * @param  pu8Key
   * @retval None
   *			@li 1: Ok
   *			@li -1: comm error
   *			@li -2: device answered error
   */
-int Sark_GetKey (int16 num, uint8 *pu8Key)
+int Sark_GetKey (int16_t num, uint8_t *pu8Key)
 {
-	uint8 tu8Rx[SARKCMD_RX_SIZE];
-	uint8 tu8Tx[SARKCMD_TX_SIZE];
+	uint8_t tu8Rx[SARKCMD_RX_SIZE];
+	uint8_t tu8Tx[SARKCMD_TX_SIZE];
 	int rc;
 
 	memset(tu8Tx, 0, SARKCMD_TX_SIZE);
 	tu8Tx[0] = CMD_GET_KEY;
 
-	rc = Sark_SndRcv (num, tu8Tx, tu8Rx);
+	rc = Sark_SndRcv(tu8Tx, tu8Rx);
 	if (rc < 0)
 	{
 		return -1;
@@ -491,22 +484,21 @@ int Sark_GetKey (int16 num, uint8 *pu8Key)
 /**
   * @brief Resets device
   *
-  * @param  num		device number (starting by zero)
   * @retval None
   *			@li 1: Ok
   *			@li -1: comm error
   *			@li -2: device answered error
   */
-int Sark_Device_Reset (int16 num)
+int Sark_Device_Reset (void)
 {
-	uint8 tu8Rx[SARKCMD_RX_SIZE];
-	uint8 tu8Tx[SARKCMD_TX_SIZE];
+	uint8_t tu8Rx[SARKCMD_RX_SIZE];
+	uint8_t tu8Tx[SARKCMD_TX_SIZE];
 	int rc;
 
 	memset(tu8Tx, 0, SARKCMD_TX_SIZE);
 	tu8Tx[0] = CMD_DEV_RST;
 
-	rc = Sark_SndRcv (num, tu8Tx, tu8Rx);
+	rc = Sark_SndRcv(tu8Tx, tu8Rx);
 	if (rc < 0)
 	{
 		return -1;
@@ -521,7 +513,6 @@ int Sark_Device_Reset (int16 num)
 /**
   * @brief Disk information
   *
-  * @param  num		device number (starting by zero)
   * @param  pu32Tot
   * @param  pu32Fre
   * @retval None
@@ -529,16 +520,16 @@ int Sark_Device_Reset (int16 num)
   *			@li -1: comm error
   *			@li -2: device answered error
   */
-int Sark_DiskInfo (int16 num, uint32 *pu32Tot, uint32 *pu32Fre)
+int Sark_DiskInfo (uint32_t *pu32Tot, uint32_t *pu32Fre)
 {
-	uint8 tu8Rx[SARKCMD_RX_SIZE];
-	uint8 tu8Tx[SARKCMD_TX_SIZE];
+	uint8_t tu8Rx[SARKCMD_RX_SIZE];
+	uint8_t tu8Tx[SARKCMD_TX_SIZE];
 	int rc;
 
 	memset(tu8Tx, 0, SARKCMD_TX_SIZE);
 	tu8Tx[0] = CMD_DISK_INFO;
 
-	rc = Sark_SndRcv (num, tu8Tx, tu8Rx);
+	rc = Sark_SndRcv(tu8Tx, tu8Rx);
 	if (rc < 0)
 	{
 		return -1;
@@ -556,23 +547,22 @@ int Sark_DiskInfo (int16 num, uint32 *pu32Tot, uint32 *pu32Fre)
 /**
   * @brief Disk volume
   *
-  * @param  num			device number (starting by zero)
   * @param  pu8Volume	volume name
   * @retval None
   *			@li 1: Ok
   *			@li -1: comm error
   *			@li -2: device answered error
   */
-int Sark_DiskVolume (int16 num, uint8 *pu8Volume)
+int Sark_DiskVolume (uint8_t *pu8Volume)
 {
-	uint8 tu8Rx[SARKCMD_RX_SIZE];
-	uint8 tu8Tx[SARKCMD_TX_SIZE];
+	uint8_t tu8Rx[SARKCMD_RX_SIZE];
+	uint8_t tu8Tx[SARKCMD_TX_SIZE];
 	int rc;
 
 	memset(tu8Tx, 0, SARKCMD_TX_SIZE);
 	tu8Tx[0] = CMD_DISK_VOLUME;
 
-	rc = Sark_SndRcv (num, tu8Tx, tu8Rx);
+	rc = Sark_SndRcv(tu8Tx, tu8Rx);
 	if (rc < 0)
 	{
 		return -1;
@@ -589,7 +579,6 @@ int Sark_DiskVolume (int16 num, uint8 *pu8Volume)
 /**
   * @brief Buzzer
   *
-  * @param  num		device number (starting by zero)
   * @param  u16Freq		frequency
   * @param  u16Duration
   * @retval None
@@ -597,10 +586,10 @@ int Sark_DiskVolume (int16 num, uint8 *pu8Volume)
   *			@li -1: comm error
   *			@li -2: device answered error
   */
-int Sark_Buzzer (int16 num, uint16 u16Freq, uint16 u16Duration)
+int Sark_Buzzer (uint16_t u16Freq, uint16_t u16Duration)
 {
-	uint8 tu8Rx[SARKCMD_RX_SIZE];
-	uint8 tu8Tx[SARKCMD_TX_SIZE];
+	uint8_t tu8Rx[SARKCMD_RX_SIZE];
+	uint8_t tu8Tx[SARKCMD_TX_SIZE];
 	int rc;
 
 	memset(tu8Tx, 0, SARKCMD_TX_SIZE);
@@ -608,7 +597,7 @@ int Sark_Buzzer (int16 num, uint16 u16Freq, uint16 u16Duration)
 	Short2Buf(&tu8Tx[1], u16Freq);
 	Short2Buf(&tu8Tx[3], u16Duration);
 
-	rc = Sark_SndRcv (num, tu8Tx, tu8Rx);
+	rc = Sark_SndRcv(tu8Tx, tu8Rx);
 	if (rc < 0)
 	{
 		return -1;
@@ -625,9 +614,9 @@ int Sark_Buzzer (int16 num, uint16 u16Freq, uint16 u16Duration)
   * @param  None
   * @retval None
   */
-static void Float2Buf (uint8 tu8Buf[4], float fVal)
+static void Float2Buf (uint8_t tu8Buf[4], float fVal)
 {
-	uint32 u32Val = *((uint32*)(&fVal));
+	uint32_t u32Val = *((uint32_t*)(&fVal));
 	Int2Buf(tu8Buf, u32Val);
 }
 
@@ -636,12 +625,12 @@ static void Float2Buf (uint8 tu8Buf[4], float fVal)
   * @param  None
   * @retval None
   */
-static void Int2Buf (uint8 tu8Buf[4], uint32 u32Val)
+static void Int2Buf (uint8_t tu8Buf[4], uint32_t u32Val)
 {
-	tu8Buf[3] = (uint8)((u32Val&0xff000000)>>24);
-	tu8Buf[2] = (uint8)((u32Val&0x00ff0000)>>16);
-	tu8Buf[1] = (uint8)((u32Val&0x0000ff00)>>8);
-	tu8Buf[0] = (uint8)((u32Val&0x000000ff)>>0);
+	tu8Buf[3] = (uint8_t)((u32Val&0xff000000)>>24);
+	tu8Buf[2] = (uint8_t)((u32Val&0x00ff0000)>>16);
+	tu8Buf[1] = (uint8_t)((u32Val&0x0000ff00)>>8);
+	tu8Buf[0] = (uint8_t)((u32Val&0x000000ff)>>0);
 }
 
 /**
@@ -649,11 +638,11 @@ static void Int2Buf (uint8 tu8Buf[4], uint32 u32Val)
   * @param  None
   * @retval None
   */
-static void Buf2Float (float *pfVal, uint8 tu8Buf[4])
+static void Buf2Float (float *pfVal, uint8_t tu8Buf[4])
 {
-	uint32 u32Val;
+	uint32_t u32Val;
 	Buf2Int(&u32Val, tu8Buf);
-	*((uint32*)(pfVal)) = u32Val;
+	*((uint32_t*)(pfVal)) = u32Val;
 }
 
 /**
@@ -661,9 +650,9 @@ static void Buf2Float (float *pfVal, uint8 tu8Buf[4])
   * @param  None
   * @retval None
   */
-static void Buf2Int (uint32 *pu32Val, uint8 tu8Buf[4])
+static void Buf2Int (uint32_t *pu32Val, uint8_t tu8Buf[4])
 {
-	uint32 u32Val;
+	uint32_t u32Val;
 
 	u32Val = tu8Buf[3] << 24;
 	u32Val += tu8Buf[2] << 16;
@@ -678,9 +667,9 @@ static void Buf2Int (uint32 *pu32Val, uint8 tu8Buf[4])
   * @param  None
   * @retval None
   */
-static void Buf2Short (uint16 *pu16Val, uint8 tu8Buf[4])
+static void Buf2Short (uint16_t *pu16Val, uint8_t tu8Buf[4])
 {
-	uint16 u16Val;
+	uint16_t u16Val;
 
 	u16Val = tu8Buf[1] << 8;
 	u16Val += tu8Buf[0] << 0;
@@ -693,10 +682,10 @@ static void Buf2Short (uint16 *pu16Val, uint8 tu8Buf[4])
   * @param  None
   * @retval None
   */
-static void Short2Buf (uint8 tu8Buf[4], uint16 u16Val)
+static void Short2Buf (uint8_t tu8Buf[4], uint16_t u16Val)
 {
-	tu8Buf[1] = (uint8)((u16Val&0xff00)>>8);
-	tu8Buf[0] = (uint8)((u16Val&0x00ff)>>0);
+	tu8Buf[1] = (uint8_t)((u16Val&0xff00)>>8);
+	tu8Buf[0] = (uint8_t)((u16Val&0x00ff)>>0);
 }
 
 
@@ -708,7 +697,7 @@ static void Short2Buf (uint8 tu8Buf[4], uint16 u16Val)
   *			@li 1: Ok
   *			@li -1: error
   */
-int Sark_SndRcv (int16 num, uint8 *tx, uint8 *rx)
+int Sark_SndRcv (uint8_t *tx, uint8_t *rx)
 {
 	int i;
 	int rc;
@@ -742,8 +731,8 @@ int Sark_SndRcv (int16 num, uint8 *tx, uint8 *rx)
 union Bits
 {
     float f;
-    int32 si;
-    uint32 ui;
+    int32_t si;
+    uint32_t ui;
 };
 
 #define C_SHIFT         13
@@ -766,14 +755,14 @@ union Bits
 #define C_SUBC 0x003FF      // max flt32 subnormal down shifted
 #define C_NORC 0x00400      // min flt32 normal down shifted
 
-static int32 const C_MAXD = C_INFC - C_MAXC - 1;
-static int32 const C_MIND = C_MINC - C_SUBC - 1;
+static int32_t const C_MAXD = C_INFC - C_MAXC - 1;
+static int32_t const C_MIND = C_MINC - C_SUBC - 1;
 
-static uint16 Float2Half(float value)
+static uint16_t Float2Half(float value)
 {
     union Bits v, s;
 	v.f = value;
-	uint32 sign = v.si & C_SIGNN;
+	uint32_t sign = v.si & C_SIGNN;
 	v.si ^= sign;
 	sign >>= C_SHIFTSIGN; // logical shift
 	s.si = C_MULN;
@@ -787,11 +776,11 @@ static uint16 Float2Half(float value)
 	return v.ui | sign;
 }
 
-static float Half2Float(uint16 value)
+static float Half2Float(uint16_t value)
 {
 	union Bits v;
 	v.ui = value;
-	int32 sign = v.si & C_SIGNC;
+	int32_t sign = v.si & C_SIGNC;
 	v.si ^= sign;
 	sign <<= C_SHIFTSIGN;
 	v.si ^= ((v.si + C_MIND) ^ v.si) & -(v.si > C_SUBC);
@@ -799,7 +788,7 @@ static float Half2Float(uint16 value)
 	union Bits s;
 	s.si = C_MULC;
 	s.f *= v.si;
-	int32 mask = -(C_NORC > v.si);
+	int32_t mask = -(C_NORC > v.si);
 	v.si <<= C_SHIFT;
 	v.si ^= (s.si ^ v.si) & mask;
 	v.si |= sign;
