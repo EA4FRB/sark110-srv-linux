@@ -1,5 +1,5 @@
 # sark110-srv-linux
-     Linux Server for connecting to the sark-110 via a network
+Linux Server for connecting to the SARK-110 Antenna Analyzer series via a network
    
 About
 ======
