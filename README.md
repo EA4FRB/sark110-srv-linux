@@ -21,7 +21,8 @@ make
 
 Run
 ----
-First time, copy sark110.rules file to /etc/udev/rules.d
+First time, copy sark110.rules file to: /etc/udev/rules.d
+
 and run: sudo udevadm control --reload-rules && udevadm trigger
 
 Otherwise, you will need to run as root.
